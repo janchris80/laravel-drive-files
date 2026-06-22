@@ -26,8 +26,16 @@ class GoogleDriveService implements DriveStorageInterface
         $client->setApplicationName($this->config['application_name'] ?? 'Laravel Drive Files');
         $client->setScopes([\Google\Service\Drive::DRIVE]);
 
-        if (! empty($this->config['credentials_path'])) {
-            $client->setAuthConfig($this->config['credentials_path']);
+        if (! empty($this->config['client_id']) && ! empty($this->config['refresh_token'])) {
+            $client->setClientId($this->config['client_id']);
+            $client->setClientSecret($this->config['client_secret']);
+            $client->setRefreshToken($this->config['refresh_token']);
+        } elseif (! empty($this->config['credentials_path'])) {
+            $path = $this->config['credentials_path'];
+            if (! \Illuminate\Support\Str::startsWith($path, '/') && ! \Illuminate\Support\Str::contains($path, ':')) {
+                $path = base_path($path);
+            }
+            $client->setAuthConfig($path);
         }
 
         $client->setHttpClient(new GuzzleClient([
@@ -62,12 +70,22 @@ class GoogleDriveService implements DriveStorageInterface
             }
 
             $client = $this->getClient();
-            $client->fetchAccessTokenWithAssertion();
             $token = $client->getAccessToken();
+            if (! $token || empty($token['access_token'])) {
+                $client->fetchAccessTokenWithRefreshToken();
+                $token = $client->getAccessToken();
+            }
+
+            $uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true';
+
+            $sharedDriveId = $this->config['shared_drive_id'] ?? null;
+            if ($sharedDriveId) {
+                $uploadUrl .= '&corpora=drive&driveId=' . $sharedDriveId;
+            }
 
             $http = new GuzzleClient(['timeout' => 30]);
             $response = $http->post(
-                'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true',
+                $uploadUrl,
                 [
                     'headers' => [
                         'Authorization'             => 'Bearer '.($token['access_token'] ?? ''),

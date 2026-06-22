@@ -8,6 +8,9 @@ return [
     |----------------------------------------------------------------------
     */
     'credentials_path'     => env('GOOGLE_DRIVE_CREDENTIALS_PATH'),
+    'client_id'            => env('GOOGLE_DRIVE_CLIENT_ID'),
+    'client_secret'        => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+    'refresh_token'        => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
     'shared_drive_id'      => env('GOOGLE_DRIVE_SHARED_DRIVE_ID'),
     'root_folder_id'       => env('GOOGLE_DRIVE_ROOT_FOLDER_ID'),
     'application_name'     => env('GOOGLE_DRIVE_APP_NAME', 'Laravel Drive Files'),
