@@ -25,6 +25,10 @@ class DriveFilesServiceProvider extends ServiceProvider
     {
         $router->aliasMiddleware('drive.permission', DrivePermission::class);
 
+        $router->bind('driveFile', function ($value) {
+            return \Janchris80\DriveFiles\Models\DriveFile::withoutGlobalScopes()->findOrFail($value);
+        });
+
         $this->publishes([
             __DIR__.'/../config/drive-files.php' => config_path('drive-files.php'),
         ], 'drive-files-config');
