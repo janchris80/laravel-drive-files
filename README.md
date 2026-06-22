@@ -138,4 +138,4 @@ The package auto-refreshes the access token using the stored `refresh_token`. Yo
 
 ## License
 
-MIT © Jungie Canghagas
+MIT © Jan Chris Ogel
