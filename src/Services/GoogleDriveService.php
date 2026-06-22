@@ -27,9 +27,11 @@ class GoogleDriveService implements DriveStorageInterface
         $client->setScopes([\Google\Service\Drive::DRIVE]);
 
         if (! empty($this->config['client_id']) && ! empty($this->config['refresh_token'])) {
-            $client->setClientId($this->config['client_id']);
-            $client->setClientSecret($this->config['client_secret']);
-            $client->setRefreshToken($this->config['refresh_token']);
+            $client->setAuthConfig([
+                'client_id'     => $this->config['client_id'],
+                'client_secret' => $this->config['client_secret'],
+                'refresh_token' => $this->config['refresh_token'],
+            ]);
         } elseif (! empty($this->config['credentials_path'])) {
             $path = $this->config['credentials_path'];
             if (! \Illuminate\Support\Str::startsWith($path, '/') && ! \Illuminate\Support\Str::contains($path, ':')) {
