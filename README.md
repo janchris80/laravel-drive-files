@@ -65,4 +65,4 @@ The package works **with or without** a permission system.
 
 ## License
 
-MIT © Jungie Canghagas
+MIT © Jan Chris Ogel
