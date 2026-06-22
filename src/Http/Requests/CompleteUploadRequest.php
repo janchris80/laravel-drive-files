@@ -16,7 +16,6 @@ class CompleteUploadRequest extends FormRequest
         return [
             'google_file_id' => ['required', 'string', 'max:255'],
             'category'       => ['nullable', 'string', 'max:64'],
-            'office_id'      => ['nullable', 'integer'],
             'meta'           => ['nullable', 'array'],
         ];
     }

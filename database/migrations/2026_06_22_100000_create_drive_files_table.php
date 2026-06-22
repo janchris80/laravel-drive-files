@@ -21,10 +21,8 @@ return new class extends Migration
             $t->string('public_link', 1024)->nullable();
             $t->string('category', 64)->nullable();
 
-            // NOTE: foreign tables are configurable, so we use plain unsigned
-            //       big ints + index. Add FK constraints in your own migration
-            //       if you want strict referential integrity.
-            $t->unsignedBigInteger('office_id')->nullable();
+            // Audit field: which app user triggered the upload.
+            // Not used for Drive auth (we use the singleton token for that).
             $t->unsignedBigInteger('uploaded_by_user_id')->nullable();
 
             $t->json('meta')->nullable();
@@ -32,7 +30,6 @@ return new class extends Migration
             $t->softDeletes();
 
             $t->index('category');
-            $t->index('office_id');
             $t->index('uploaded_by_user_id');
             $t->index('visibility');
         });

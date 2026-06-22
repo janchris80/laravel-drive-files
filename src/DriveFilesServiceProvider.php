@@ -4,6 +4,9 @@ namespace Janchris80\DriveFiles;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Janchris80\DriveFiles\Console\Commands\ConnectDriveCommand;
+use Janchris80\DriveFiles\Console\Commands\DisconnectDriveCommand;
+use Janchris80\DriveFiles\Console\Commands\DriveStatusCommand;
 use Janchris80\DriveFiles\Contracts\DriveStorageInterface;
 use Janchris80\DriveFiles\Http\Middleware\DrivePermission;
 use Janchris80\DriveFiles\Services\GoogleDriveService;
@@ -23,17 +26,20 @@ class DriveFilesServiceProvider extends ServiceProvider
 
     public function boot(Router $router): void
     {
-        // Middleware alias — works with or without permissions enabled.
         $router->aliasMiddleware('drive.permission', DrivePermission::class);
 
-        // Publishes
         $this->publishes([
             __DIR__.'/../config/drive-files.php' => config_path('drive-files.php'),
         ], 'drive-files-config');
 
+        $stampA = date('Y_m_d_His');
+        $stampB = date('Y_m_d_His', time() + 1);
+
         $this->publishes([
             __DIR__.'/../database/migrations/2026_06_22_100000_create_drive_files_table.php'
-                => database_path('migrations/'.date('Y_m_d_His').'_create_drive_files_table.php'),
+                => database_path('migrations/'.$stampA.'_create_drive_files_table.php'),
+            __DIR__.'/../database/migrations/2026_06_22_100001_create_drive_tokens_table.php'
+                => database_path('migrations/'.$stampB.'_create_drive_tokens_table.php'),
         ], 'drive-files-migrations');
 
         $this->publishes([
@@ -46,6 +52,14 @@ class DriveFilesServiceProvider extends ServiceProvider
 
         if (config('drive-files.routes.enabled', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/drive.php');
+        }
+
+        if ($this->app->runningInConsole() && config('drive-files.commands.enabled', true)) {
+            $this->commands([
+                ConnectDriveCommand::class,
+                DriveStatusCommand::class,
+                DisconnectDriveCommand::class,
+            ]);
         }
     }
 }

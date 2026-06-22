@@ -39,7 +39,6 @@ class DriveFile extends Model
         'visibility',
         'public_link',
         'category',
-        'office_id',
         'uploaded_by_user_id',
         'meta',
     ];
@@ -52,11 +51,6 @@ class DriveFile extends Model
     public function getTable(): string
     {
         return config('drive-files.table_name', 'drive_files');
-    }
-
-    public function office(): BelongsTo
-    {
-        return $this->belongsTo(config('drive-files.models.office'), 'office_id');
     }
 
     public function uploadedBy(): BelongsTo
@@ -72,6 +66,11 @@ class DriveFile extends Model
     public function scopeInCategory(Builder $q, string $category): Builder
     {
         return $q->where('category', $category);
+    }
+
+    public function scopeForUser(Builder $q, int $userId): Builder
+    {
+        return $q->where('uploaded_by_user_id', $userId);
     }
 
     public function getSizeKbAttribute(): float

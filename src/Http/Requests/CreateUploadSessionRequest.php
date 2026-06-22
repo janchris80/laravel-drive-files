@@ -24,7 +24,6 @@ class CreateUploadSessionRequest extends FormRequest
             'origin'           => ['required', 'url'],
             'parent_folder_id' => ['nullable', 'string', 'max:255'],
             'category'         => ['nullable', 'string', 'max:64'],
-            'office_id'        => ['nullable', 'integer'],
         ];
     }
 }

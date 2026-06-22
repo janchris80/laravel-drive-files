@@ -4,16 +4,25 @@ return [
 
     /*
     |----------------------------------------------------------------------
-    | Google Drive Credentials
+    | Google OAuth 2.0 (Single Personal Google Account)
     |----------------------------------------------------------------------
+    | The app owner connects ONE personal Google Drive account once.
+    | All app users upload to this same Drive.
     */
-    'credentials_path'     => env('GOOGLE_DRIVE_CREDENTIALS_PATH'),
-    'client_id'            => env('GOOGLE_DRIVE_CLIENT_ID'),
-    'client_secret'        => env('GOOGLE_DRIVE_CLIENT_SECRET'),
-    'refresh_token'        => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
-    'shared_drive_id'      => env('GOOGLE_DRIVE_SHARED_DRIVE_ID'),
-    'root_folder_id'       => env('GOOGLE_DRIVE_ROOT_FOLDER_ID'),
+    'oauth' => [
+        'client_id'     => env('GOOGLE_DRIVE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+        'redirect_uri'  => env('GOOGLE_DRIVE_REDIRECT_URI'),
+        'scopes'        => [
+            'https://www.googleapis.com/auth/drive.file',
+            'https://www.googleapis.com/auth/userinfo.email',
+        ],
+        'access_type' => 'offline',
+        'prompt'      => 'consent',
+    ],
+
     'application_name'     => env('GOOGLE_DRIVE_APP_NAME', 'Laravel Drive Files'),
+    'root_folder_id'       => env('GOOGLE_DRIVE_ROOT_FOLDER_ID'),
     'public_links_enabled' => env('GOOGLE_DRIVE_PUBLIC_LINKS_ENABLED', false),
 
     /*
@@ -22,16 +31,11 @@ return [
     |----------------------------------------------------------------------
     */
     'table_name'           => 'drive_files',
+    'tokens_table_name'    => 'drive_tokens',
     'auto_load_migrations' => true,
 
-    /*
-    |----------------------------------------------------------------------
-    | Host App Models (override to your own)
-    |----------------------------------------------------------------------
-    */
     'models' => [
-        'user'   => 'App\\Models\\User',
-        'office' => 'App\\Models\\Office',
+        'user' => 'App\\Models\\User',
     ],
 
     /*
@@ -52,7 +56,7 @@ return [
 
     /*
     |----------------------------------------------------------------------
-    | Routes
+    | Routes / Auth / Commands
     |----------------------------------------------------------------------
     */
     'routes' => [
@@ -61,22 +65,19 @@ return [
         'name'    => env('DRIVE_ROUTES_NAME', 'api.v1.drive.'),
     ],
 
-    /*
-    |----------------------------------------------------------------------
-    | Authentication Middleware
-    |----------------------------------------------------------------------
-    */
     'auth' => [
         'middleware'       => ['auth:sanctum'],
         'extra_middleware' => [],
     ],
 
+    'commands' => [
+        'enabled' => env('DRIVE_COMMANDS_ENABLED', true),
+    ],
+
     /*
     |----------------------------------------------------------------------
-    | Permission Gating (works with or without spatie/laravel-permission)
+    | Permission Gating
     |----------------------------------------------------------------------
-    | When `enabled` is false, all authenticated users have full access.
-    | When true, the DrivePermission middleware checks $user->can($ability).
     */
     'permissions' => [
         'enabled' => env('DRIVE_PERMISSIONS_ENABLED', true),
@@ -86,6 +87,7 @@ return [
             'create' => 'drive.files.create',
             'delete' => 'drive.files.delete',
             'share'  => 'drive.files.share',
+            'admin'  => 'drive.files.admin',
         ],
     ],
 ];

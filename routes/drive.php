@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Janchris80\DriveFiles\Http\Controllers\DriveAuthController;
 use Janchris80\DriveFiles\Http\Controllers\DriveFileController;
 
 $prefix     = config('drive-files.routes.prefix', 'api/v1/drive');
@@ -14,6 +15,23 @@ Route::middleware($middleware)
     ->prefix($prefix)
     ->name($name)
     ->group(function () {
+        // ---------------- OAuth (admin-only) ----------------
+        Route::get('oauth/redirect', [DriveAuthController::class, 'redirect'])
+            ->middleware('drive.permission:admin')
+            ->name('oauth.redirect');
+
+        Route::get('oauth/callback', [DriveAuthController::class, 'callback'])
+            ->name('oauth.callback');
+
+        Route::get('oauth/status', [DriveAuthController::class, 'status'])
+            ->middleware('drive.permission:view')
+            ->name('oauth.status');
+
+        Route::delete('oauth/disconnect', [DriveAuthController::class, 'disconnect'])
+            ->middleware('drive.permission:admin')
+            ->name('oauth.disconnect');
+
+        // ---------------- Files ----------------
         Route::get('files', [DriveFileController::class, 'index'])
             ->middleware('drive.permission:view')
             ->name('files.index');

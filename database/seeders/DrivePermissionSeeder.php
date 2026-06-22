@@ -18,13 +18,11 @@ class DrivePermissionSeeder extends Seeder
             return;
         }
 
-        $guard       = config('drive-files.permissions.guard', 'web');
-        $abilities   = config('drive-files.permissions.abilities', []);
+        $guard     = config('drive-files.permissions.guard', 'web');
+        $abilities = config('drive-files.permissions.abilities', []);
 
         foreach ($abilities as $key => $name) {
-            $permissionClass::firstOrCreate(
-                ['name' => $name, 'guard_name' => $guard]
-            );
+            $permissionClass::firstOrCreate(['name' => $name, 'guard_name' => $guard]);
         }
 
         $admin  = $roleClass::firstOrCreate(['name' => 'drive-admin',  'guard_name' => $guard]);

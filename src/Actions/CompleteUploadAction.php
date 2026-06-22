@@ -24,7 +24,6 @@ class CompleteUploadAction
             'size_bytes'             => (int) ($info['size'] ?? 0),
             'visibility'             => 'private',
             'category'               => $validated['category'] ?? null,
-            'office_id'              => $validated['office_id'] ?? null,
             'uploaded_by_user_id'    => $user?->id,
             'meta'                   => $validated['meta'] ?? null,
         ]);

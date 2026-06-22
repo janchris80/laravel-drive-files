@@ -11,33 +11,10 @@ use Janchris80\DriveFiles\Models\DriveFile;
  */
 class DriveFilePolicy
 {
-    public function viewAny($user): bool
-    {
-        return true;
-    }
-
-    public function view($user, DriveFile $file): bool
-    {
-        return true;
-    }
-
-    public function create($user): bool
-    {
-        return true;
-    }
-
-    public function update($user, DriveFile $file): bool
-    {
-        return true;
-    }
-
-    public function delete($user, DriveFile $file): bool
-    {
-        return true;
-    }
-
-    public function share($user, DriveFile $file): bool
-    {
-        return true;
-    }
+    public function viewAny($user): bool { return true; }
+    public function view($user, DriveFile $file): bool { return true; }
+    public function create($user): bool { return true; }
+    public function update($user, DriveFile $file): bool { return true; }
+    public function delete($user, DriveFile $file): bool { return true; }
+    public function share($user, DriveFile $file): bool { return true; }
 }

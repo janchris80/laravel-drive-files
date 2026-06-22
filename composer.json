@@ -1,14 +1,11 @@
 {
     "name": "janchris80/laravel-drive-files",
-    "description": "Google Drive file management for Laravel — resumable uploads, sharing, metadata storage, and optional permission gating.",
+    "description": "Single-tenant Google Drive integration for Laravel — connect one personal Google account once, all app users upload to it. Resumable uploads, sharing, metadata, and optional permission gating.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["laravel", "google-drive", "files", "uploads", "resumable", "sharing"],
+    "keywords": ["laravel", "google-drive", "files", "uploads", "resumable", "sharing", "oauth", "single-tenant"],
     "authors": [
-        {
-            "name": "Jungie Canghagas",
-            "email": "janchris80@example.com"
-        }
+        { "name": "Jungie Canghagas", "email": "janchris80@example.com" }
     ],
     "require": {
         "php": "^8.2",
@@ -16,7 +13,8 @@
         "illuminate/database": "^11.0|^12.0|^13.0",
         "illuminate/support": "^11.0|^12.0|^13.0",
         "illuminate/routing": "^11.0|^12.0|^13.0",
-        "illuminate/http": "^11.0|^12.0|^13.0"
+        "illuminate/http": "^11.0|^12.0|^13.0",
+        "illuminate/console": "^11.0|^12.0|^13.0"
     },
     "require-dev": {
         "orchestra/testbench": "^9.0|^10.0",
@@ -28,20 +26,14 @@
         "spatie/laravel-permission": "Enables role/permission gating via the DrivePermission middleware (^6.0)"
     },
     "autoload": {
-        "psr-4": {
-            "Janchris80\\DriveFiles\\": "src/"
-        }
+        "psr-4": { "Janchris80\\DriveFiles\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": {
-            "Janchris80\\DriveFiles\\Tests\\": "tests/"
-        }
+        "psr-4": { "Janchris80\\DriveFiles\\Tests\\": "tests/" }
     },
     "extra": {
         "laravel": {
-            "providers": [
-                "Janchris80\\DriveFiles\\DriveFilesServiceProvider"
-            ]
+            "providers": ["Janchris80\\DriveFiles\\DriveFilesServiceProvider"]
         }
     },
     "minimum-stability": "stable",
