@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use Janchris80\DriveFiles\Http\Controllers\DriveAuthController;
 use Janchris80\DriveFiles\Http\Controllers\DriveFileController;
@@ -8,7 +9,8 @@ $prefix     = config('drive-files.routes.prefix', 'api/v1/drive');
 $name       = config('drive-files.routes.name',   'api.v1.drive.');
 $middleware = array_merge(
     config('drive-files.auth.middleware', []),
-    config('drive-files.auth.extra_middleware', [])
+    config('drive-files.auth.extra_middleware', []),
+    [SubstituteBindings::class],
 );
 
 Route::middleware($middleware)
